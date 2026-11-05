@@ -17,12 +17,15 @@ writeFileSync(join(dir, 'secret.txt'), 'no')
 
 let route
 let authorized = true
+let failRead = false
+const warnings = []
 const fs = {
   async resolve(path, { cwd }) {
     const abs = isAbsolute(path) ? path : resolve(cwd, path)
     return { targetKey: abs, displayPath: abs }
   },
   async stat(target) {
+    if (failRead) throw new Error('disk unavailable')
     try {
       const s = await stat(target.targetKey)
       return { type: s.isFile() ? 'file' : 'directory', size: s.size, version: String(s.mtimeMs) }
@@ -44,6 +47,8 @@ const fs = {
 const ctx = {
   effect: (fn) => fn(),
   get: () => undefined,
+  // Same shape as the host's logger: an object with level methods.
+  logger: { warn: (value) => warnings.push(value), info() {} },
   webServer: { register: (r) => { route = r; return () => {} } },
   connection: { requestRejection: () => (authorized ? undefined : 401) },
   fs,
@@ -100,6 +105,18 @@ test('unsatisfiable range answers 416', async () => {
 test('download=1 adds an attachment disposition', async () => {
   const res = await fetch(`${url('clip.mp4')}&download=1`, { method: 'HEAD' })
   assert.match(res.headers.get('content-disposition'), /^attachment; filename\*=UTF-8''clip\.mp4$/)
+})
+
+test('an unexpected filesystem failure answers 500 and is logged', async () => {
+  failRead = true
+  try {
+    const res = await fetch(url('clip.mp4'), { signal: AbortSignal.timeout(3000) })
+    assert.equal(res.status, 500)
+  } finally {
+    failRead = false
+  }
+  assert.equal(warnings.length, 1)
+  assert.match(String(warnings[0]), /disk unavailable/)
 })
 
 test('refusals', async () => {
