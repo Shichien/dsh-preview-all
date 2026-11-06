@@ -1,7 +1,7 @@
-# Bundle patch for dsh-video-preview: inserts the plugin's Host row.
-# The row serves the authenticated byte-range route the Sidebar player reads;
-# the client half (lib/client.js) is loaded through the package's
-# `dsh.client` manifest entry.
+# Bundle patch for dsh-preview-all-in-one: inserts the plugin's Host row.
+# The row serves the authenticated preview routes the Sidebar panels read; the
+# client half (lib/client.js) is loaded through the package's `dsh.client`
+# manifest entry.
 - insert:
-    - id: video-preview
-      name: 'dsh-video-preview'
+    - id: preview-all-in-one
+      name: 'dsh-preview-all-in-one'

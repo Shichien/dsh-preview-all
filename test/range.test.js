@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { parseRange, videoTypeOf } from '../lib/index.js'
+import { parseRange, mediaTypeOf } from '../lib/index.js'
 
 test('no or malformed Range sends the full file', () => {
   assert.deepEqual(parseRange(undefined, 100), { kind: 'full' })
@@ -25,10 +25,11 @@ test('unsatisfiable ranges', () => {
   assert.deepEqual(parseRange('bytes=0-', 0), { kind: 'unsatisfiable' })
 })
 
-test('video types by extension, case-insensitive', () => {
-  assert.equal(videoTypeOf('a/B.MP4'), 'video/mp4')
-  assert.equal(videoTypeOf('clip.webm'), 'video/webm')
-  assert.equal(videoTypeOf('x.mov'), 'video/mp4')
-  assert.equal(videoTypeOf('notes.txt'), undefined)
-  assert.equal(videoTypeOf('mp4'), undefined)
+test('media types by extension, case-insensitive', () => {
+  assert.equal(mediaTypeOf('a/B.MP4'), 'video/mp4')
+  assert.equal(mediaTypeOf('clip.webm'), 'video/webm')
+  assert.equal(mediaTypeOf('x.mov'), 'video/mp4')
+  assert.equal(mediaTypeOf('song.flac'), 'audio/flac')
+  assert.equal(mediaTypeOf('notes.txt'), undefined)
+  assert.equal(mediaTypeOf('mp4'), undefined)
 })

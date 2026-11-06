@@ -1,7 +1,7 @@
 {
-  "name": "dsh-video-preview",
-  "version": "0.1.0",
-  "description": "DSH plugin: preview video files (mp4, webm, mov, mkv, ...) in the right Sidebar with a seekable HTML5 player",
+  "name": "dsh-preview-all-in-one",
+  "version": "0.2.0",
+  "description": "DSH plugin: one right-Sidebar preview for every file DSH's builtin previews leave to 'binary file, download' — video and audio, archives, fonts, camera raw, HEIC/AVIF, RTF/ODF documents, and any other binary",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node --test test/range.test.js test/route.test.js test/client.test.js"
+    "test": "node --test test/range.test.js test/route.test.js test/client.test.js test/binary.test.js test/font.test.js test/sevenzip.test.js test/raster.test.js test/decompress.test.js"
   },
   "dsh": {
     "bundle": {

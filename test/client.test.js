@@ -91,15 +91,78 @@ test('resume store keeps only the newest 200 files', () => {
   } finally {
     Date.now = realNow
   }
-  const all = JSON.parse(memory.get('dsh-video-preview:positions'))
+  const all = JSON.parse(memory.get('dsh-preview-all-in-one:positions'))
   assert.equal(Object.keys(all).length, 200)
   assert.equal(mod.loadPosition('f0'), undefined)
   assert.equal(mod.loadPosition('f204'), 60)
 })
 
 test('corrupt storage is ignored', () => {
-  memory.set('dsh-video-preview:positions', '{not json')
+  memory.set('dsh-preview-all-in-one:positions', '{not json')
   assert.equal(mod.loadPosition('k'), undefined)
   mod.storePosition('k', 60, 600)
   assert.equal(mod.loadPosition('k'), 60)
+})
+
+test('session and absolute addresses both parse', () => {
+  const prefix = 'dsh-resource://file/'
+  assert.deepEqual(mod.fileOf(`${prefix}session/s1/clip.mp4`), { scope: 'session', sessionId: 's1', path: 'clip.mp4' })
+  assert.deepEqual(
+    mod.fileOf(`${prefix}session/abc%20123/C:/Users/me/My%20Clips/%E8%A7%86%E9%A2%91.mov`),
+    { scope: 'session', sessionId: 'abc 123', path: 'C:/Users/me/My Clips/视频.mov' },
+  )
+  assert.deepEqual(mod.fileOf(`${prefix}absolute/C:/x/a.mp4`), { scope: 'absolute', path: 'C:/x/a.mp4' })
+  assert.deepEqual(mod.fileOf(`${prefix}absolute//host/share/a.zip`), { scope: 'absolute', path: '//host/share/a.zip' })
+  assert.deepEqual(mod.fileOf(`${prefix}absolute/home/me/a.zip`), { scope: 'absolute', path: '/home/me/a.zip' })
+  // A query or fragment never becomes part of the path.
+  assert.deepEqual(mod.fileOf(`${prefix}session/s1/a.zip?x=1`), { scope: 'session', sessionId: 's1', path: 'a.zip' })
+  assert.equal(mod.fileOf('https://example.com/a.zip'), undefined)
+  assert.equal(mod.fileOf(`${prefix}session/s1`), undefined)
+  assert.equal(mod.fileOf(`${prefix}elsewhere/s1/a.zip`), undefined)
+})
+
+test('only suffixes this plugin claims pass hasSuffix', () => {
+  assert.equal(mod.hasSuffix('C:/x/clip.mkv'), true)
+  assert.equal(mod.hasSuffix('C:\\x\\CLIP.MP4'), true)
+  assert.equal(mod.hasSuffix('bundle.zip'), true)
+  assert.equal(mod.hasSuffix('song.flac'), true)
+  assert.equal(mod.hasSuffix('font.woff2'), true)
+  assert.equal(mod.hasSuffix('report.rtf'), true)
+  // Builtin renderers own these; claiming them would shadow a better preview.
+  assert.equal(mod.hasSuffix('a.png'), false)
+  assert.equal(mod.hasSuffix('a.pdf'), false)
+  assert.equal(mod.hasSuffix('a.docx'), false)
+  assert.equal(mod.hasSuffix('a.xlsx'), false)
+  assert.equal(mod.hasSuffix('a.ts'), false)
+  assert.equal(mod.hasSuffix('a.md'), false)
+  assert.equal(mod.hasSuffix('no-suffix'), false)
+})
+
+test('preview URLs carry the session only when there is one', () => {
+  const base = 'http://127.0.0.1:43120/'
+  assert.equal(
+    mod.previewUrl(base, 'info', { scope: 'session', sessionId: 's 1', path: 'a b/c.zip' }),
+    'http://127.0.0.1:43120/preview/info?sessionId=s+1&path=a+b%2Fc.zip',
+  )
+  assert.equal(
+    mod.previewUrl(base, 'stream', { scope: 'absolute', path: 'C:/x/a.mp4' }),
+    'http://127.0.0.1:43120/preview/stream?path=C%3A%2Fx%2Fa.mp4',
+  )
+  assert.equal(
+    mod.previewUrl(base, 'download', { scope: 'absolute', path: 'a.zip' }),
+    'http://127.0.0.1:43120/preview/download?path=a.zip',
+  )
+})
+
+test('sizes and the document shell', () => {
+  assert.equal(mod.formatSize(0), '0 B')
+  assert.equal(mod.formatSize(999), '999 B')
+  assert.equal(mod.formatSize(1536), '1.5 KB')
+  assert.equal(mod.formatSize(20 * 1024 * 1024), '20 MB')
+  assert.equal(mod.formatSize(Number.NaN), '')
+  const html = mod.documentHtml('<p>hi &amp; bye</p>', 'a <b>.rtf')
+  assert.ok(html.startsWith('<!DOCTYPE html>'))
+  assert.ok(html.includes('<p>hi &amp; bye</p>'))
+  assert.ok(html.includes('a &lt;b&gt;.rtf'))
+  assert.ok(html.includes("default-src 'none'"))
 })
