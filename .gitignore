@@ -1,3 +1,5 @@
 node_modules/
 # Test clips are generated locally with ffmpeg; see README.
 samples/
+# Fixtures of the stress run (npm run stress); removed when it finishes.
+.stress-tmp/

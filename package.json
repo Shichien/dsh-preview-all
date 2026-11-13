@@ -26,6 +26,7 @@
     "build": "node scripts/build-client.mjs",
     "test": "node --test test/*.test.js",
     "pretest": "node scripts/build-client.mjs --check",
+    "stress": "node test/stress/run.mjs"
   },
   "dsh": {
     "bundle": {
