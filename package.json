@@ -5,9 +5,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shichien/dsh-video-preview.git"
+    "url": "git+https://github.com/Shichien/dsh-preview-all.git"
   },
-  "homepage": "https://github.com/Shichien/dsh-video-preview#readme",
+  "homepage": "https://github.com/Shichien/dsh-preview-all#readme",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

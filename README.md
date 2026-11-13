@@ -67,7 +67,7 @@
 ## 安装
 
 ```sh
-dsh plugin --profile desktop add github:Shichien/dsh-video-preview
+dsh plugin --profile desktop add github:Shichien/dsh-preview-all
 ```
 
 `dsh plugin add` 只安装依赖，不会启用插件。还要在 profile 的 `package.json`（例如 `~/.dsh/profiles/desktop/package.json`）里，把 `"dsh-preview-all-in-one"` 加到 `dsh.profile.bundles` 列表里，然后刷新 DSH 页面。
@@ -75,7 +75,7 @@ dsh plugin --profile desktop add github:Shichien/dsh-video-preview
 本地开发时可以用 `link:` 安装源码目录；客户端修改需要重新构建后刷新页面，Host 修改需要重启 DSH，具体步骤见下方“客户端构建与本地开发”：
 
 ```sh
-dsh plugin --profile desktop add link:/path/to/dsh-video-preview
+dsh plugin --profile desktop add link:/path/to/dsh-preview-all
 ```
 
 ## 项目结构
