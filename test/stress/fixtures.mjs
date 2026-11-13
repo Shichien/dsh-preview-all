@@ -388,8 +388,6 @@ const BUILDERS = {
   },
 }
 
-export const FIXTURE_NAMES = Object.keys(BUILDERS)
-
 /**
  * Build the named fixtures (and whatever they are derived from) into `dir`.
  * Existing files are reused, so a kept directory makes reruns fast.
