@@ -3,7 +3,7 @@
 // keys off and stay independent of the samples/ directory.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { inspectBinary } from '../lib/binary.js'
+import { inspectBinary } from '../lib/formats/binary/inspect.js'
 
 /**
  * Growable byte buffer with the little/big-endian writers the fixtures need.

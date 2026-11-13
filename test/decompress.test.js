@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { DecompressError, decompressAll, sniffCompression } from '../lib/decompress.js'
+import { DecompressError, decompressAll, sniffCompression } from '../lib/formats/archive/decompress.js'
 
 /** Decode a base64 fixture into the bytes the decoder will consume. */
 function bytes(base64) {

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
-import { list7zRar, SevenZipError } from '../lib/sevenzip.js'
+import { list7zRar, SevenZipError } from '../lib/formats/archive/sevenzip.js'
 
 // Real 7z archives built with py7zr at authoring time, embedded as base64 so the
 // suite needs no fixture files. All of them hold the same five entries:

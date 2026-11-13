@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { deflateSync, inflateSync } from 'node:zlib'
-import { rasterToPng, sniffRaster, RasterError } from '../lib/raster.js'
+import { rasterToPng, sniffRaster, RasterError } from '../lib/formats/raster/decode.js'
 
 /* ------------------------------------------------------------------------- *
  * Fixture writers

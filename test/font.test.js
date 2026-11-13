@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import { deflateSync } from 'node:zlib'
-import { parseFontInfo, sniffFontFormat } from '../lib/font.js'
+import { parseFontInfo, sniffFontFormat } from '../lib/formats/font/parse.js'
 
 /** Big-endian u16 into a plain array. */
 function be16(value) {
