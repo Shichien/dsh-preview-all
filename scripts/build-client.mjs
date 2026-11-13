@@ -27,7 +27,7 @@ export { validateFormatDefinitions } from '../lib/formats/catalog.js';
 import createImageBody from '../lib/client/image.js';
 import migrateLegacyTabs from '../lib/client/legacy-tabs.js';
 
-const ID = 'dsh-preview-all-in-one';
+const ID = 'dsh-preview-all';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const LIB = join(ROOT, 'lib');
 const CLIENT_DIR = join(LIB, 'client');

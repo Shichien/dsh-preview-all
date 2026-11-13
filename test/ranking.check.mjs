@@ -16,7 +16,7 @@ globalThis.window = { __ModuleLoader__: { load: ({ factory }) => { mod = factory
 
 const types = [
   { id: 'better-sidebar', band: 3, patterns: ['dsh-resource://file/**'] },
-  { id: 'preview-all-in-one', band: 3, patterns: mod.PATTERNS, canOpen: (a) => { const f = mod.fileOf(a); return f !== undefined && mod.hasSuffix(f.path) } },
+  { id: 'preview-all', band: 3, patterns: mod.PATTERNS, canOpen: (a) => { const f = mod.fileOf(a); return f !== undefined && mod.hasSuffix(f.path) } },
   { id: 'documentpreview', band: 1, patterns: ['dsh-resource://file/[\\s\\S]+'] },
 ]
 function winner(address) {
@@ -32,7 +32,7 @@ function winner(address) {
 }
 
 const s = 'dsh-resource://file/session/abc%20123/'
-const ours = 'preview-all-in-one'
+const ours = 'preview-all'
 const cases = [
   // Media keeps working exactly as the video-only plugin did.
   [`${s}videos/demo.mp4`, ours],

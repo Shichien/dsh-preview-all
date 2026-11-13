@@ -10,7 +10,7 @@ import { join, isAbsolute, resolve } from 'node:path'
 import { deflateRawSync, inflateSync } from 'node:zlib'
 import { apply, ROUTE } from '../lib/index.js'
 
-const dir = mkdtempSync(join(tmpdir(), 'preview-all-in-one-'))
+const dir = mkdtempSync(join(tmpdir(), 'preview-all-'))
 const media = Buffer.alloc(3 * 1024 * 1024 + 123)
 for (let i = 0; i < media.length; i++) media[i] = i % 251
 writeFileSync(join(dir, 'clip.mp4'), media)

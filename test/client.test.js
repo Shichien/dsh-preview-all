@@ -104,14 +104,14 @@ test('resume store keeps only the newest 200 files', () => {
   } finally {
     Date.now = realNow
   }
-  const all = JSON.parse(memory.get('dsh-preview-all-in-one:positions'))
+  const all = JSON.parse(memory.get('dsh-preview-all:positions'))
   assert.equal(Object.keys(all).length, 200)
   assert.equal(media.loadPosition('f0'), undefined)
   assert.equal(media.loadPosition('f204'), 60)
 })
 
 test('corrupt storage is ignored', () => {
-  memory.set('dsh-preview-all-in-one:positions', '{not json')
+  memory.set('dsh-preview-all:positions', '{not json')
   assert.equal(media.loadPosition('k'), undefined)
   media.storePosition('k', 60, 600)
   assert.equal(media.loadPosition('k'), 60)

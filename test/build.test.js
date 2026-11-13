@@ -33,7 +33,7 @@ test('the entry carries no panel, and each chunk registers under its own name', 
     const window = { __ModuleLoader__: { load: (registration) => registrations.push(registration) } };
     new Function('window', outputs[chunkNameOf(kind)])(window);
     assert.equal(registrations.length, 1);
-    assert.equal(registrations[0].id, 'dsh-preview-all-in-one');
+    assert.equal(registrations[0].id, 'dsh-preview-all');
     assert.equal(registrations[0].chunk, chunkNameOf(kind));
     // A chunk is self-contained: it must materialise without requiring anything.
     const exports = registrations[0].factory(() => { throw new Error('a chunk must not require modules'); });

@@ -1,5 +1,5 @@
 {
-  "name": "dsh-preview-all-in-one",
+  "name": "dsh-preview-all",
   "version": "0.2.0",
   "description": "DSH plugin: one right-Sidebar preview for every file DSH's builtin previews leave to 'binary file, download' — video and audio, archives, fonts, camera raw, HEIC/AVIF, RTF/ODF documents, and any other binary",
   "license": "MIT",

@@ -25,7 +25,7 @@ function memoryStorage(entries) {
     setItem(key, value) { writes.push(key); values.set(key, String(value)) },
   }
 }
-function assertMigrated(storage, key, kind = 'preview-all-in-one') {
+function assertMigrated(storage, key, kind = 'preview-all') {
   const expected = legacy()
   expected.bySession.s.layout.tabs.old.kind = kind
   assert.deepEqual(JSON.parse(storage.values.get(key)), expected)
@@ -110,13 +110,26 @@ test('partial write failure retries without rewriting successes; completed runs 
 test('initialization still registers tab effects when localStorage getter throws', () => {
   const effects = []
   const context = vm.createContext({
-    migrateLegacyTabs, NS: 'preview',
+    migrateLegacyTabs, ID: 'dsh-preview-all', NS: 'dsh-preview-all',
     get localStorage() { throw new Error('SecurityError') },
   })
   vm.runInContext(readFileSync(new URL('../lib/client/60-apply.js', import.meta.url), 'utf8'), context)
   context.apply({ locale: { bind: () => () => '' }, effect: (callback, name) => effects.push(name) })
   assert.deepEqual(effects, [
-    'dsh-preview-all-in-one: styles', 'dsh-preview-all-in-one: dictionaries',
-    'dsh-preview-all-in-one: tab type', 'dsh-preview-all-in-one: tab body',
+    'dsh-preview-all: styles', 'dsh-preview-all: dictionaries',
+    'dsh-preview-all: tab type', 'dsh-preview-all: tab body',
   ])
+})
+
+test('every kind this plugin used before the rename is rewritten; the current one is not', () => {
+  const key = prefix + 'kinds'
+  const state = legacy()
+  state.bySession.s.layout.tabs.old.kind = 'preview-all-in-one'
+  state.bySession.s.layout.tabs.current = { kind: 'preview-all', address: 'file.mp4' }
+  const storage = memoryStorage([[key, JSON.stringify(state)]])
+  migrateLegacyTabs(storage)
+  const tabs = JSON.parse(storage.values.get(key)).bySession.s.layout.tabs
+  assert.equal(tabs.old.kind, 'preview-all')
+  assert.equal(tabs.current.kind, 'preview-all')
+  assert.deepEqual(storage.writes, [key])
 })

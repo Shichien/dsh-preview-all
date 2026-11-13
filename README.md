@@ -1,4 +1,4 @@
-# dsh-preview-all-in-one
+# dsh-preview-all
 
 在 DSH 右侧边栏补充音视频、压缩包、字体、相机 RAW、文档和二进制文件预览。点开一个 `bundle.zip`、`tool.exe`、`MyFont.woff2`、`notes.rtf`、`raw.dng`，侧边栏会打开对应的面板；具体内容能否解码取决于文件变体、大小限制和浏览器能力。
 
@@ -62,7 +62,7 @@
   - `GET /preview/download` 原始文件字节，带 attachment 文件名。
   - 认证沿用 GUI 自己路由的连接校验（`ctx.connection.requestRejection`）；文件一律经 `ctx.fs` 读取，沙箱读权限与 DSH 自带文档预览一致；相对路径按会话工作目录解析，`absolute` 作用域的地址按绝对路径解析。
   - 文件内容与 JSON 响应使用 [共享响应头](<lib/shared/http.js>)：`cache-control: private, no-store`、`nosniff` 和 `content-security-policy: sandbox; default-src 'none'`。
-- **Client**（共享源码与各类别的组件工厂由 `npm run build` 生成 [入口 bundle](<lib/client.js>) 和每个类别一个的 `client.<kind>.js`）：注册右侧边栏 tab 类型 `preview-all-in-one`，模式为 `dsh-resource://file/**/*.{…164 个扩展名…}`。它和 Better Sidebar 的 `dsh-resource://file/**` 同在 `extension` 档，模式更长，所以这些文件由本插件打开，其余文件照旧。文档面板里的 HTML 片段放在 `sandbox=""` 的 iframe 里，脚本无法执行。
+- **Client**（共享源码与各类别的组件工厂由 `npm run build` 生成 [入口 bundle](<lib/client.js>) 和每个类别一个的 `client.<kind>.js`）：注册右侧边栏 tab 类型 `preview-all`，模式为 `dsh-resource://file/**/*.{…164 个扩展名…}`。它和 Better Sidebar 的 `dsh-resource://file/**` 同在 `extension` 档，模式更长，所以这些文件由本插件打开，其余文件照旧。文档面板里的 HTML 片段放在 `sandbox=""` 的 iframe 里，脚本无法执行。
 
 ## 安装
 
@@ -70,7 +70,9 @@
 dsh plugin --profile desktop add github:Shichien/dsh-preview-all
 ```
 
-`dsh plugin add` 只安装依赖，不会启用插件。还要在 profile 的 `package.json`（例如 `~/.dsh/profiles/desktop/package.json`）里，把 `"dsh-preview-all-in-one"` 加到 `dsh.profile.bundles` 列表里，然后刷新 DSH 页面。
+`dsh plugin add` 只安装依赖，不会启用插件。还要在 profile 的 `package.json`（例如 `~/.dsh/profiles/desktop/package.json`）里，把 `"dsh-preview-all"` 加到 `dsh.profile.bundles` 列表里，然后刷新 DSH 页面。
+
+> 升级提示：插件此前叫过 `dsh-preview-all-in-one` 和 `dsh-video-preview`。旧版本的侧边栏 tab 种类（`preview-all-in-one`、`video-preview`）和本地存储键（`dsh-preview-all-in-one:prefs`、`dsh-preview-all-in-one:positions`）会在首次加载时自动迁移，已打开的预览标签和记住的播放位置不会丢。
 
 本地开发时可以用 `link:` 安装源码目录；客户端修改需要重新构建后刷新页面，Host 修改需要重启 DSH，具体步骤见下方“客户端构建与本地开发”：
 
